@@ -93,7 +93,7 @@ class SocketPlay(tornado.websocket.WebSocketHandler):
                         print("Jogador ",obj['username']," entrou no jogo!")
                         self.ready.remove((obj['username'],self))
                         self.playing.append((obj['username'],self))
-                    else print("Não entrou")
+                    else: print("Não entrou")
                         
                 elif obj['function'] == 'end':
                     if (obj['username'],self) in self.playing:
