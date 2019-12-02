@@ -1,0 +1,59 @@
+Quest 1:
+    Crie um programa que faça a contagem e a impressão de uma sequencia de 1 a 100
+
+Dica:
+    Use um laço de repetição 'for'
+    Use 'printf'
+
+Solução:
+    #include <stdio.h>
+    
+    void main() {
+        int i;
+        for (i = 0; i < 100; i++) {
+            printf("%d", &i+1);
+        }
+    }
+
+Keys: void, main, int, for, printf, #include
+
+Quest 2:
+    Crie um programa que faça a média aritmética dos 5 primeiros números primos
+
+Dica:
+    Os 5 primeiros números primos são: 1, 3, 5, 7 e 9
+    Use um laço de repetição 'for'
+
+Solução:
+    #include <stdio.h>
+
+    void main() {
+        int med, primos[5] = [1,3,5,7,9], i, soma = 0;
+        for (i = 0; i < 5; i++) {
+            soma += primos[i];
+        }
+        med = soma/5;
+    }
+Keys: void, main, int, for, #include
+
+Quest 3:
+    Crie uma função que retorne se um triângulo é equilátero (0), escaleno (1) ou isósceles (2) (os lados do triângulo serão passados como parâmetro)
+
+Dica:
+    A função retorna um int
+    Os lados do triângulo são passados como parametro
+
+Solução:
+    int FuncName(int a, int b, int c) {
+        int resultado;
+        if(a == b && a == c){
+            resultado = 0;
+        } else if (a == b || a == c) {
+            resultado = 1;
+        } else {
+            resultado = 2;
+        }
+        return resultado;
+    }
+
+Keys: int, functionName, if, return

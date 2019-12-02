@@ -12,7 +12,7 @@ import socket
 --------------------------------
 
 """
-
+codesValidos = ["print"]
 
 def find(self,obj):
     if len(self.ready) > 1:
@@ -30,7 +30,8 @@ def find(self,obj):
     else:
         print("Não há oponentes")
         self.write_message(json.dumps({'response':'no'}))
-        
+
+
 def buscarDados(nome):
     users = []
     with open('./dados/users.json','r') as f: #pega os players do arquivo ou servidor
@@ -40,14 +41,40 @@ def buscarDados(nome):
             return user['vitoria'],user['derrota'],user['pontos']
     return 0
 
-def codePoints(nome,code,self):
-    #enviar os pontos tag response : end
-    #trabalhar em como setar os pontos
-    qtd = len(code)
-    self.write_message(json.dumps({"response":"fim","pontos":qtd,"status":"1"}))
-    pass
 
+def waitoponente(self,jogador,oponente):
+    self.espera.append(jogador)
+    while ((jogador in self.espera) and (oponente in self.espera)):
+        pass
+    pontos = avalia(self,jogador,codesValidos) # aqui adiciona os coódigos válidos do json
+    self.points = (pontos,self)
+    if self.points>1:
+        if self.points.index(0)[0] >= self.points.index(1)[0]:
+            self.points.index(0)[1].write_message(json.dumps({"response":"fim","pontos":points.index(0)[0],"status":"1"}))
+            self.points.index(1)[1].write_message(json.dumps({"response":"fim","pontos":points.index(1)[0],"status":"0"}))
+            print("Jogador ",points.index(0)[0]," ganhou!")
+            print("Jogador ",points.index(1)[0]," perdeu!")
+        else:
+            self.points.index(0)[1].write_message(json.dumps({"response":"fim","pontos":points.index(0)[0],"status":"0"}))
+            self.points.index(1)[1].write_message(json.dumps({"response":"fim","pontos":points.index(1)[0],"status":"1"}))
+            print("Jogador ",points.index(1)[0]," ganhou!")
+            print("Jogador ",points.index(0)[0]," perdeu!")
+        self.points.remove(points.index(0))
+        self.points.remove(points.index(1))
+    self.playing.remove((obj['username'],self))
+    print("Fim da partida! ")
 
+def avalia(self, jogador,codv):#codv Códigos válidos
+    points = 0
+    for (conn,nome,entrada,linha) in self.code:
+        if nome == jogador:
+            for y in codv:
+                if entrada.count(y):
+                    points += 1
+            self.code.remove((conn,nome,entrada,linha))
+    return points
+                
+    
 
 """
 --------------------------------
@@ -64,6 +91,9 @@ class SocketPlay(tornado.websocket.WebSocketHandler):
     versus = []
     playing = []
     waiting = []
+    code = []
+    espera = []
+    points = []
 
     def open(self):
         self.connections.add(self)
@@ -93,12 +123,21 @@ class SocketPlay(tornado.websocket.WebSocketHandler):
                         print("Jogador ",obj['username']," entrou no jogo!")
                         self.ready.remove((obj['username'],self))
                         self.playing.append((obj['username'],self))
-                    else: self.write_message(json.dumps({"response":"fim","status":"0"}))
+                        #Aqui retorna o problema de cada um
+                    else: 
+                        self.code.append(self,obj['username'],obj['input'],obj['line'])
                         
                 elif obj['function'] == 'end':
                     if (obj['username'],self) in self.playing:
-                        self.playing.remove((obj['username'],self))
-                        codePoints(obj['username'],obj['code'],self)
+                        oponente = ""
+                        for (x,y) in self.versus:
+                            if obj['username'] == x:
+                                oponente = y
+                                break
+                            elif obj['username']==y:
+                                oponente = x
+                                break
+                        waitoponente(self,obj['username'])
                         return 0 #fim do jogo
 
 
