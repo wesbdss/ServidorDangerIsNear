@@ -44,7 +44,7 @@ def buscarDados(nome):
     return 0
 
 
-async def waitoponente(self,jogador,oponente,obj):
+async def waitoponente(self,jogador,oponente):
     if jogador not in self.espera: 
         self.espera.append(jogador)
     print("Espera >> Jogador ",jogador, "Esperando", oponente)
