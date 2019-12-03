@@ -45,7 +45,7 @@ def websetInfo(self,body):
             user['derrota'] = body['derrota']
             break
     with open('./dados/users.json','w') as f:
-        json.dump(f)
+        json.dump(users,f)
     print("(webService) >>",body['username']," atualizou o arquivo")
 
 
