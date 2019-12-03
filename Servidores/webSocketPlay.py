@@ -59,8 +59,8 @@ def waitoponente(self,jogador,oponente):
         print("ERR >> Ocorreu um erro de Jogador fantasta")
     pontosOponente = avalia(connOp,oponente,codesValidos)
     pontosJogador = avalia(self,jogador,codesValidos) # aqui adiciona os coódigos válidos do json
-    self.points.append(pontosJogador,self)
-    self.points.append(pontosOponente,connOp)
+    self.points.append((pontosJogador,self))
+    self.points.append((pontosOponente,connOp))
     if len(self.points)> 1:
         if self.points.index(0)[0] >= self.points.index(1)[0]:
             self.points.index(0)[1].write_message(json.dumps({"response":"fim","pontos":points.index(0)[0],"status":"1"}))
