@@ -5,6 +5,7 @@ import tornado.websocket
 import tornado.ioloop
 import tornado.web
 import socket
+from tornado.locks import Event
 
 """
 --------------------------------
@@ -13,6 +14,7 @@ import socket
 
 """
 codesValidos = ["print"]
+event = Event()
 
 def find(self,obj):
     if len(self.ready) > 1:
@@ -42,10 +44,15 @@ def buscarDados(nome):
     return 0
 
 
-def waitoponente(self,jogador,oponente):
-    self.espera.append(jogador) #append() takes exactly one argument (4 given) -----------------------------------------><><><><><><>
-    while ((jogador in self.espera) and (oponente in self.espera)):
-        pass
+async def waitoponente(self,jogador,oponente,obj):
+    if jogador not in self.espera: 
+        self.espera.append(jogador)
+    print("Espera >> Jogador ",jogador, "Esperando", oponente)
+    if not (jogador in self.espera and oponente in self.espera):
+        await event.wait()
+    else :
+        event.set()
+
     pontos = avalia(self,jogador,codesValidos) # aqui adiciona os coódigos válidos do json
     self.points = (pontos,self)
     if self.points>1:
@@ -94,6 +101,7 @@ class SocketPlay(tornado.websocket.WebSocketHandler):
     code = []
     espera = []
     points = []
+    lock = 0
 
     def open(self):
         self.connections.add(self)
