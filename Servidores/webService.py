@@ -36,6 +36,19 @@ def webgetInfo(self,body):
         if user['username'] == body['username']:
             self.write(json.dumps({"vitoria":user['vitoria'],"derrota":user['derrota'],"pontos":user['pontos'],"response":"ok"}))
             return
+def websetInfo(self,body):
+    print("(webService) >>",body['username']," setou informações")
+    for user in users:
+        if user['username'] == body['username']:
+            user['pontos']=body['pontos']
+            user['vitoria'] = body['vitoria']
+            user['derrota'] = body['derrota']
+            break
+    with open('./dados/users.json','w') as f:
+        json.dump(f)
+    print("(webService) >>",body['username']," atualizou o arquivo")
+
+
 
 
 """
@@ -65,6 +78,8 @@ class WebHandle(tornado.web.RequestHandler):
                 weblogin(self,bodyjson)
             elif bodyjson['function'] == 'getInfo': #acessa função 
                 webgetInfo(self,bodyjson)
+            elif bodyjson['function'] == 'setInfo':
+                websetInfo(self,bodyjson)
             elif bodyjson['function'] == 'online':
                 self.online = bodyjson['response']
             elif bodyjson['function'] == 'lobby':
