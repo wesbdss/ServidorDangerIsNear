@@ -9,6 +9,8 @@ import tornado.web
 users = []
 with open('./dados/users.json','r') as f: #pega os players do arquivo ou servidor
     users = json.load(f)
+with open('./dados/quests.json','r') as f:
+    quests = f.json.load(f)
 
 """
 --------------------------------
