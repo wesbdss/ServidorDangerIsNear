@@ -123,9 +123,6 @@ class SocketPlay(tornado.websocket.WebSocketHandler):
                 self.write_message('ok')
             else:
                 obj = json.loads(str(message)) 
-                _ = requests.post('http://lit-fortress-57323.herokuapp.com/', data=json.dumps({"function":"playing","response":str(self.playing)}))
-                _ = requests.post('http://lit-fortress-57323.herokuapp.com/', data=json.dumps({"function":"lobby","response":str(self.ready)}))
-                _ = requests.post('http://lit-fortress-57323.herokuapp.com/', data=json.dumps({"function":"online","response":str(self.connections)}))
                 print("Json: >> ",obj)
                 if ((obj['username'],self) not in self.ready) and ((obj['username'],self) not in self.playing): #adiciona novos players
                     self.ready.append((obj['username'],self))
@@ -158,7 +155,7 @@ class SocketPlay(tornado.websocket.WebSocketHandler):
                         waitoponente(self,obj['username'],oponente)
                         return 0 #fim do jogo
                 
-                    
+
 
 
             print("---> Saindo no webSocketPlay <---")
