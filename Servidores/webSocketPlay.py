@@ -67,8 +67,8 @@ def waitoponente(self,jogador,oponente):
         if self.points[0][0] >= self.points[1][0]:
             self.points[0][1].write_message(json.dumps({"response":"fim","pontos":self.points[0][0],"status":"1"}))
             self.points[1][1].write_message(json.dumps({"response":"fim","pontos":self.points[1][0],"status":"0"}))
-            print("Jogador ",points[0][0]," ganhou!")
-            print("Jogador ",points[1][0]," perdeu!")
+            print("Jogador ",self.points[0][0]," ganhou!")
+            print("Jogador ",self.points[1][0]," perdeu!")
         else:
             self.points[0][1].write_message(json.dumps({"response":"fim","pontos":self.points[0][0],"status":"0"}))
             self.points[1][1].write_message(json.dumps({"response":"fim","pontos":self.points[1][0],"status":"1"}))
