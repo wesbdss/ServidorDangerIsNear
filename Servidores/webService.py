@@ -50,7 +50,7 @@ class WebHandle(tornado.web.RequestHandler):
     lobby =[]
     playing = []
     def get(self):
-        self.write(str("Jogadores Online:<br/>",self.online,"<br/>Jogadores no lobby:<br/>",self.lobby,"<br/>Jogadores em jogo:<br/>",self.playing).encode('UTF-8'))
+        self.write(("Jogadores Online:<br/>"+str(self.online),"<br/>Jogadores no lobby:<br/>",str(self.lobby),"<br/>Jogadores em jogo:<br/>",str(self.playing)).encode('UTF-8'))
 
     def post(self):
         print("---> Entrando no webService <---")
