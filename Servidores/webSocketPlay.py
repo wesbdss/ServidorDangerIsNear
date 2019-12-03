@@ -62,8 +62,8 @@ def waitoponente(self,jogador,oponente):
     self.points.append((pontosJogador,self))
     self.points.append((pontosOponente,connOp))
     print(">> VETOR ",self.points)
-    print(">> index ",self.points.index(0))
-    print(">> index ",self.points.index(1))
+    print(">> index ",self.points[0])
+    print(">> index ",self.points[1])
     if len(self.points)> 1:
         if self.points.index(0)[0] >= self.points.index(1)[0]:
             self.points.index(0)[1].write_message(json.dumps({"response":"fim","pontos":points.index(0)[0],"status":"1"}))
