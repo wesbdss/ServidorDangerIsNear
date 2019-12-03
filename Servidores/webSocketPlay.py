@@ -43,7 +43,7 @@ def buscarDados(nome):
 
 
 def waitoponente(self,jogador,oponente):
-    self.espera.append(jogador)
+    self.espera.append(jogador) #append() takes exactly one argument (4 given) -----------------------------------------><><><><><><>
     while ((jogador in self.espera) and (oponente in self.espera)):
         pass
     pontos = avalia(self,jogador,codesValidos) # aqui adiciona os coódigos válidos do json
@@ -118,6 +118,7 @@ class SocketPlay(tornado.websocket.WebSocketHandler):
                 if obj['function'] == 'jogar':
                     print("Jogador ",obj['username']," está querendo jogar!")
                     find(self,obj) #encontrar jogadores
+
                 elif obj['function'] == 'ingame':
                     if ((obj['username'],self) in self.ready) and ((obj['username'],self) not in self.playing):
                         print("Jogador ",obj['username']," entrou no jogo!")
@@ -125,7 +126,7 @@ class SocketPlay(tornado.websocket.WebSocketHandler):
                         self.playing.append((obj['username'],self))
                         #Aqui retorna o problema de cada um
                     else: 
-                        self.code.append(self,obj['username'],obj['input'],obj['line'])
+                        self.code.append((self,obj['username'],obj['input'],obj['line']))
                         
                 elif obj['function'] == 'end':
                     if (obj['username'],self) in self.playing:
