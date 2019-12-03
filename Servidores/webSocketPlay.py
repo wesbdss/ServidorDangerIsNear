@@ -123,18 +123,17 @@ class SocketPlay(tornado.websocket.WebSocketHandler):
                 self.write_message('ok')
             else:
                 obj = json.loads(str(message)) 
-                
+                _ = requests.post('http://lit-fortress-57323.herokuapp.com/', data=json.dumps({"function":"playing","response":str(self.playing)}))
+                _ = requests.post('http://lit-fortress-57323.herokuapp.com/', data=json.dumps({"function":"lobby","response":str(self.lobby)}))
+                _ = requests.post('http://lit-fortress-57323.herokuapp.com/', data=json.dumps({"function":"online","response":str(self.connections)}))
                 print("Json: >> ",obj)
                 if ((obj['username'],self) not in self.ready) and ((obj['username'],self) not in self.playing): #adiciona novos players
                     self.ready.append((obj['username'],self))
-                    requests.post('http://lit-fortress-57323.herokuapp.com/', data=json.dumps({"function":"online","response":str(self.connections)}))
-
                 """
                     Funções de Ação do Game
                 """
                 if obj['function'] == 'jogar':
                     print("(webSocketPlay) >> Jogador ",obj['username']," está querendo jogar!")
-                    requests.post('http://lit-fortress-57323.herokuapp.com/', data=json.dumps({"function":"lobby","response":str(self.lobby)}))
                     find(self,obj) #encontrar jogadores
 
                 elif obj['function'] == 'ingame':
@@ -142,7 +141,6 @@ class SocketPlay(tornado.websocket.WebSocketHandler):
                         print("Jogador ",obj['username']," entrou no jogo!")
                         self.ready.remove((obj['username'],self))
                         self.playing.append((obj['username'],self))
-                        requests.post('http://lit-fortress-57323.herokuapp.com/', data=json.dumps({"function":"playing","response":str(self.playing)}))
                         #Aqui retorna o problema de cada um
                     else: 
                         self.code.append((self,obj['username'],obj['input'],obj['line']))
@@ -159,6 +157,9 @@ class SocketPlay(tornado.websocket.WebSocketHandler):
                                 break
                         waitoponente(self,obj['username'],oponente)
                         return 0 #fim do jogo
+                
+                    
+
 
             print("---> Saindo no webSocketPlay <---")
             if (message == 'quit' or message == 'exit'):
