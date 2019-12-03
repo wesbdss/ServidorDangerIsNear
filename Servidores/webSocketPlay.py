@@ -164,8 +164,6 @@ class SocketPlay(tornado.websocket.WebSocketHandler):
             print("---> Saindo no webSocketPlay <---")
             if (message == 'quit' or message == 'exit'):
                 self.write_message(b'fodase')
-                quit()
-
 
         except Exception as er: # sair cado der erro
             print("Erro (webSocketPlay) >> ",er)
