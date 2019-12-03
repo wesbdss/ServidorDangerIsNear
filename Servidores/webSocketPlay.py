@@ -138,7 +138,7 @@ class SocketPlay(tornado.websocket.WebSocketHandler):
                             elif obj['username']==y:
                                 oponente = x
                                 break
-                        waitoponente(self,obj['username'])
+                        waitoponente(self,obj['username'],oponente)
                         return 0 #fim do jogo
 
 
