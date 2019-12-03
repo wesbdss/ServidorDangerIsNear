@@ -56,7 +56,7 @@ def waitoponente(self,jogador,oponente):
             connOp=y[1]
     if connOp =='':
         print("ERR >> Ocorreu um erro de Jogador fantasta")
-    pontosOponente = avalia(connOP,oponente,codesValidos)
+    pontosOponente = avalia(connOp,oponente,codesValidos)
     pontosJogador = avalia(self,jogador,codesValidos) # aqui adiciona os coódigos válidos do json
     self.points = (pontosJogador,self)
     self.points = (pontosOponente,connOp)
