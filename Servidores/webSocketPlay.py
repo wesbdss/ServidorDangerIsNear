@@ -65,18 +65,18 @@ def waitoponente(self,jogador,oponente):
     print(">> index ",self.points[0])
     print(">> index ",self.points[1])
     if len(self.points)> 1:
-        if self.points.index(0)[0] >= self.points.index(1)[0]:
-            self.points.index(0)[1].write_message(json.dumps({"response":"fim","pontos":points.index(0)[0],"status":"1"}))
-            self.points.index(1)[1].write_message(json.dumps({"response":"fim","pontos":points.index(1)[0],"status":"0"}))
-            print("Jogador ",points.index(0)[0]," ganhou!")
-            print("Jogador ",points.index(1)[0]," perdeu!")
+        if self.points[0][0] >= self.points[1][0]:
+            self.points[0][1].write_message(json.dumps({"response":"fim","pontos":points[0][0],"status":"1"}))
+            self.points[1][1].write_message(json.dumps({"response":"fim","pontos":points[1][0],"status":"0"}))
+            print("Jogador ",points[0][0]," ganhou!")
+            print("Jogador ",points[1][0]," perdeu!")
         else:
-            self.points.index(0)[1].write_message(json.dumps({"response":"fim","pontos":points.index(0)[0],"status":"0"}))
-            self.points.index(1)[1].write_message(json.dumps({"response":"fim","pontos":points.index(1)[0],"status":"1"}))
-            print("Jogador ",points.index(1)[0]," ganhou!")
-            print("Jogador ",points.index(0)[0]," perdeu!")
-        self.points.remove(points.index(0))
-        self.points.remove(points.index(1))
+            self.points[0][1].write_message(json.dumps({"response":"fim","pontos":points[0][0],"status":"0"}))
+            self.points[1][1].write_message(json.dumps({"response":"fim","pontos":points[1][0],"status":"1"}))
+            print("Jogador ",points[1][0]," ganhou!")
+            print("Jogador ",points[0][0]," perdeu!")
+        self.points.remove(points[0])
+        self.points.remove(points[1])
     self.playing.remove((obj['username'],self))
     print("Fim da partida! ")
 
@@ -88,6 +88,7 @@ def avalia(self, jogador,codv):#codv Códigos válidos
                 if entrada.count(y):
                     points += 1
             self.code.remove((conn,nome,entrada,linha))
+    print(" >> jogador ",jogador," Fez ",points," Pontos!!")
     return points
                 
     
