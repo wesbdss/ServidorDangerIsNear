@@ -48,6 +48,7 @@ def waitoponente(self,jogador,oponente):
         self.espera.append(jogador)
     print("Espera >> Jogador ",jogador, "Esperando", oponente)
     if not (jogador in self.espera and oponente in self.espera):
+        print(">> Jogador ",jogador," terminou primeiro")
         return
     #um dos dois entra
     connOp = ''
@@ -60,7 +61,7 @@ def waitoponente(self,jogador,oponente):
     pontosJogador = avalia(self,jogador,codesValidos) # aqui adiciona os coódigos válidos do json
     self.points = (pontosJogador,self)
     self.points = (pontosOponente,connOp)
-    if self.points>1:
+    if len(self.points )> 1:
         if self.points.index(0)[0] >= self.points.index(1)[0]:
             self.points.index(0)[1].write_message(json.dumps({"response":"fim","pontos":points.index(0)[0],"status":"1"}))
             self.points.index(1)[1].write_message(json.dumps({"response":"fim","pontos":points.index(1)[0],"status":"0"}))
