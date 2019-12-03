@@ -168,13 +168,15 @@ class SocketPlay(tornado.websocket.WebSocketHandler):
         for x in self.ready: #retira players desconectados do lobby
             if self == x[1]:
                 print ('Player: '+x[0]+' desconectado do lobby!')
+                y=x[0]
                 self.ready.remove(x)
 
         for x in self.playing: #retira players desconectados do game
             if self == x[1]:
                 print ('Player: '+x[0]+' desconectado do jogo!')
+                y=x[0]
                 self.playing.remove(x)
-        requests.post('http://lit-fortress-57323.herokuapp.com/', data=json.dumps({"function":"offiline","username":x[0]}))
+        requests.post('http://lit-fortress-57323.herokuapp.com/', data=json.dumps({"function":"offiline","username":y}))
 
         self.connections.remove(self)
 
