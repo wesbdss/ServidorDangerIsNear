@@ -5,7 +5,7 @@ import tornado.websocket
 import tornado.ioloop
 import tornado.web
 import socket
-from tornado.locks import Event
+import threading
 
 """
 --------------------------------
@@ -14,7 +14,6 @@ from tornado.locks import Event
 
 """
 codesValidos = ["print"]
-event = Event()
 
 def find(self,obj):
     if len(self.ready) > 1:
@@ -44,17 +43,23 @@ def buscarDados(nome):
     return 0
 
 
-async def waitoponente(self,jogador,oponente):
+def waitoponente(self,jogador,oponente):
     if jogador not in self.espera: 
         self.espera.append(jogador)
     print("Espera >> Jogador ",jogador, "Esperando", oponente)
     if not (jogador in self.espera and oponente in self.espera):
-        await event.wait()
-    else :
-        event.set()
-
-    pontos = avalia(self,jogador,codesValidos) # aqui adiciona os coódigos válidos do json
-    self.points = (pontos,self)
+        return
+    #um dos dois entra
+    connOp = ''
+    for y in self.playing:
+        if y[0] == oponente:
+            connOp=y[1]
+    if connOp =='':
+        print("ERR >> Ocorreu um erro de Jogador fantasta")
+    pontosOponente = avalia(connOP,oponente,codesValidos)
+    pontosJogador = avalia(self,jogador,codesValidos) # aqui adiciona os coódigos válidos do json
+    self.points = (pontosJogador,self)
+    self.points = (pontosOponente,connOp)
     if self.points>1:
         if self.points.index(0)[0] >= self.points.index(1)[0]:
             self.points.index(0)[1].write_message(json.dumps({"response":"fim","pontos":points.index(0)[0],"status":"1"}))
@@ -146,7 +151,7 @@ class SocketPlay(tornado.websocket.WebSocketHandler):
                             elif obj['username']==y:
                                 oponente = x
                                 break
-                        await waitoponente(self,obj['username'],oponente)
+                        waitoponente(self,obj['username'],oponente)
                         return 0 #fim do jogo
 
 
