@@ -17,7 +17,6 @@ with open('./dados/users.json','r') as f: #pega os players do arquivo ou servido
 
 """
 def weblogin(self,body):
-    print("(webService) >> Login Solicitado")
     if body['username'] != '' and body['pass'] != '':
         auth = 0
         for x in users:
@@ -32,11 +31,10 @@ def weblogin(self,body):
     print("(webService) >>  Login Terminado")
 
 def webgetInfo(self,body):
-    print("(webService) >> Informações Solicitado")
+    print("(webService) >>",body['username']," solicitou informações")
     for user in users:
         if user['username'] == body['username']:
             self.write(json.dumps({"vitoria":user['vitoria'],"derrota":user['derrota'],"pontos":user['pontos'],"response":"ok"}))
-            print("Enviando Informações")
             return
 
 
@@ -48,8 +46,9 @@ def webgetInfo(self,body):
 """
 
 class WebHandle(tornado.web.RequestHandler):
+    online =[]
     def get(self):
-        self.write(b"Comi teu pai, get")
+        self.write(json.dumps({"response":self.online}))
 # channel.stream.listen((data) => setState(() => variable(data)))
     def post(self):
         print("---> Entrando no webService <---")
@@ -62,8 +61,16 @@ class WebHandle(tornado.web.RequestHandler):
             #print(bodyjson)
             if bodyjson['function'] == 'login': #acessa função 
                 weblogin(self,bodyjson)
+                self.online.append(bodyjson['username'])
             elif bodyjson['function'] == 'getInfo': #acessa função 
                 webgetInfo(self,bodyjson)
+            elif bodyjson['function'] == 'online':
+                print(self.online)
+            elif bodyjson['function'] == 'offiline':
+                self.online.remove(bodyjson['username'])
+                print("(webService) >> usuário deslogado ",bodyjson['username'])
+
+
             print("---> Saindo no webService <---")
         except Exception as er:
             print("ERRO (webService) >> ",er," --- ",sys.exc_info()[0])

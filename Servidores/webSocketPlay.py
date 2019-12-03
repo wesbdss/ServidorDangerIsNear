@@ -5,7 +5,7 @@ import tornado.websocket
 import tornado.ioloop
 import tornado.web
 import socket
-
+import requests
 """
 --------------------------------
         INICIO  Funções Socket
@@ -45,9 +45,9 @@ def buscarDados(nome):
 def waitoponente(self,jogador,oponente):
     if jogador not in self.espera: 
         self.espera.append(jogador)
-    print("Espera >> Jogador ",jogador, "Esperando", oponente)
+    print("(webSocketPlay) >> Jogador ",jogador, "Esperando ", oponente)
     if not (jogador in self.espera and oponente in self.espera):
-        print(">> Jogador ",jogador," terminou primeiro")
+        print("(webSocketPlay)>> Jogador ",jogador," terminou primeiro")
         return
     #um dos dois entra
     connOp = ''
@@ -60,9 +60,6 @@ def waitoponente(self,jogador,oponente):
     pontosJogador = avalia(self,jogador,codesValidos) # aqui adiciona os coódigos válidos do json
     self.points.append((pontosJogador,self))
     self.points.append((pontosOponente,connOp))
-    print(">> VETOR ",self.points)
-    print(">> index ",self.points[0])
-    print(">> index ",self.points[1])
     if len(self.points)> 1:
         if self.points[0][0] >= self.points[1][0]:
             self.points[0][1].write_message(json.dumps({"response":"fim","pontos":self.points[0][0],"status":"1"}))
@@ -135,7 +132,7 @@ class SocketPlay(tornado.websocket.WebSocketHandler):
                     Funções de Ação do Game
                 """
                 if obj['function'] == 'jogar':
-                    print("Jogador ",obj['username']," está querendo jogar!")
+                    print("(webSocketPlay) >> Jogador ",obj['username']," está querendo jogar!")
                     find(self,obj) #encontrar jogadores
 
                 elif obj['function'] == 'ingame':
@@ -160,26 +157,25 @@ class SocketPlay(tornado.websocket.WebSocketHandler):
                         waitoponente(self,obj['username'],oponente)
                         return 0 #fim do jogo
 
-
-
-
             print("---> Saindo no webSocketPlay <---")
             if (message == 'quit' or message == 'exit'):
                 self.write_message(b'fodase')
 
         except Exception as er: # sair cado der erro
             print("Erro (webSocketPlay) >> ",er)
-            quit()
  
     def on_close(self):
         for x in self.ready: #retira players desconectados do lobby
             if self == x[1]:
                 print ('Player: '+x[0]+' desconectado do lobby!')
                 self.ready.remove(x)
+
         for x in self.playing: #retira players desconectados do game
             if self == x[1]:
                 print ('Player: '+x[0]+' desconectado do jogo!')
                 self.playing.remove(x)
+        requests.post('http://lit-fortress-57323.herokuapp.com/', data=json.dumps({"function":"offiline","username":x[0]}))
+
         self.connections.remove(self)
 
  
