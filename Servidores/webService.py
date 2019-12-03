@@ -46,9 +46,9 @@ def webgetInfo(self,body):
 """
 
 class WebHandle(tornado.web.RequestHandler):
-    online =[]
-    lobby =[]
-    playing = []
+    online =''
+    lobby =''
+    playing = ''
     def get(self):
         self.write(("Jogadores Online:<br/>"+str(self.online)+"<br/>Jogadores no lobby:<br/>"+str(self.lobby)+"<br/>Jogadores em jogo:<br/>"+str(self.playing)).encode('UTF-8'))
 
@@ -63,7 +63,6 @@ class WebHandle(tornado.web.RequestHandler):
             print(bodyjson)
             if bodyjson['function'] == 'login': #acessa função 
                 weblogin(self,bodyjson)
-                self.online.append(bodyjson['username'])
             elif bodyjson['function'] == 'getInfo': #acessa função 
                 webgetInfo(self,bodyjson)
             elif bodyjson['function'] == 'online':
