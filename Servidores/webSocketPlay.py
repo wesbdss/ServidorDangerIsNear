@@ -74,9 +74,11 @@ def waitoponente(self,jogador,oponente):
             self.points[1][1].write_message(json.dumps({"response":"fim","pontos":self.points[1][0],"status":"1"}))
             print("Jogador ",self.points[1][0]," ganhou!")
             print("Jogador ",self.points[0][0]," perdeu!")
-        self.points.remove(self.points[0])
+        print(">> ", jogador, "terminou")
         self.points.remove(self.points[1])
+        self.points.remove(self.points[0])
     self.playing.remove((obj['username'],self))
+    self.ready.append((obj['username'],self))
     print("Fim da partida! ")
 
 def avalia(self, jogador,codv):#codv Códigos válidos
