@@ -127,12 +127,14 @@ class SocketPlay(tornado.websocket.WebSocketHandler):
                 print("Json: >> ",obj)
                 if ((obj['username'],self) not in self.ready) and ((obj['username'],self) not in self.playing): #adiciona novos players
                     self.ready.append((obj['username'],self))
+                    requests.post('http://lit-fortress-57323.herokuapp.com/', data=json.dumps({"function":"online","response":self.connections}))
 
                 """
                     Funções de Ação do Game
                 """
                 if obj['function'] == 'jogar':
                     print("(webSocketPlay) >> Jogador ",obj['username']," está querendo jogar!")
+                    requests.post('http://lit-fortress-57323.herokuapp.com/', data=json.dumps({"function":"lobby","response":self.lobby}))
                     find(self,obj) #encontrar jogadores
 
                 elif obj['function'] == 'ingame':
@@ -140,6 +142,7 @@ class SocketPlay(tornado.websocket.WebSocketHandler):
                         print("Jogador ",obj['username']," entrou no jogo!")
                         self.ready.remove((obj['username'],self))
                         self.playing.append((obj['username'],self))
+                        requests.post('http://lit-fortress-57323.herokuapp.com/', data=json.dumps({"function":"playing","response":self.playing}))
                         #Aqui retorna o problema de cada um
                     else: 
                         self.code.append((self,obj['username'],obj['input'],obj['line']))
@@ -176,7 +179,7 @@ class SocketPlay(tornado.websocket.WebSocketHandler):
                 print ('Player: '+x[0]+' desconectado do jogo!')
                 y=x[0]
                 self.playing.remove(x)
-        requests.post('http://lit-fortress-57323.herokuapp.com/', data=json.dumps({"function":"offiline","username":y}))
+        
 
         self.connections.remove(self)
 

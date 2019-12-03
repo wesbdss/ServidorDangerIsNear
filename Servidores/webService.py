@@ -47,9 +47,11 @@ def webgetInfo(self,body):
 
 class WebHandle(tornado.web.RequestHandler):
     online =[]
+    lobby =[]
+    playing = []
     def get(self):
-        self.write(json.dumps({"response":self.online}))
-# channel.stream.listen((data) => setState(() => variable(data)))
+        self.write("Jogadores Online:<br/>",self.online,"<br/>Jogadores no lobby:<br/>",self.lobby,"<br/>Jogadores em jogo:<br/>",self.playing)
+
     def post(self):
         print("---> Entrando no webService <---")
         try:
@@ -58,14 +60,18 @@ class WebHandle(tornado.web.RequestHandler):
             body = self.request.body #pegar corpo da mensagem
             #print("Body >> ",body)
             bodyjson = json.loads(body.decode('UTF-8'))# importa o bytes para string
-            #print(bodyjson)
+            print(bodyjson)
             if bodyjson['function'] == 'login': #acessa função 
                 weblogin(self,bodyjson)
                 self.online.append(bodyjson['username'])
             elif bodyjson['function'] == 'getInfo': #acessa função 
                 webgetInfo(self,bodyjson)
             elif bodyjson['function'] == 'online':
-                print(self.online)
+                self.online = bodyjson['response']
+            elif bodyjson['function'] == 'lobby':
+                self.lobby = bodyjson['response']
+            elif bodyjson['function'] == 'playing':
+                self.playing = bodyjson['response']
             elif bodyjson['function'] == 'offiline':
                 self.online.remove(bodyjson['username'])
                 print("(webService) >> usuário deslogado ",bodyjson['username'])
