@@ -77,8 +77,8 @@ def waitoponente(self,jogador,oponente):
         print(">> ", jogador, "terminou")
         self.points.remove(self.points[1])
         self.points.remove(self.points[0])
-    self.playing.remove((obj['username'],self))
-    self.ready.append((obj['username'],self))
+    self.playing.remove((jogador,self))
+    self.ready.append((jogador,self))
     print("Fim da partida! ")
 
 def avalia(self, jogador,codv):#codv Códigos válidos
