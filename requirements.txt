@@ -1,3 +1,4 @@
 tornado
 websocket
 websocket_client
+requests
