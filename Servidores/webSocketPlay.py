@@ -5,7 +5,6 @@ import tornado.websocket
 import tornado.ioloop
 import tornado.web
 import socket
-import threading
 
 """
 --------------------------------
@@ -66,17 +65,17 @@ def waitoponente(self,jogador,oponente):
     print(">> index ",self.points[1])
     if len(self.points)> 1:
         if self.points[0][0] >= self.points[1][0]:
-            self.points[0][1].write_message(json.dumps({"response":"fim","pontos":points[0][0],"status":"1"}))
-            self.points[1][1].write_message(json.dumps({"response":"fim","pontos":points[1][0],"status":"0"}))
+            self.points[0][1].write_message(json.dumps({"response":"fim","pontos":self.points[0][0],"status":"1"}))
+            self.points[1][1].write_message(json.dumps({"response":"fim","pontos":self.points[1][0],"status":"0"}))
             print("Jogador ",points[0][0]," ganhou!")
             print("Jogador ",points[1][0]," perdeu!")
         else:
-            self.points[0][1].write_message(json.dumps({"response":"fim","pontos":points[0][0],"status":"0"}))
-            self.points[1][1].write_message(json.dumps({"response":"fim","pontos":points[1][0],"status":"1"}))
-            print("Jogador ",points[1][0]," ganhou!")
-            print("Jogador ",points[0][0]," perdeu!")
-        self.points.remove(points[0])
-        self.points.remove(points[1])
+            self.points[0][1].write_message(json.dumps({"response":"fim","pontos":self.points[0][0],"status":"0"}))
+            self.points[1][1].write_message(json.dumps({"response":"fim","pontos":self.points[1][0],"status":"1"}))
+            print("Jogador ",self.points[1][0]," ganhou!")
+            print("Jogador ",self.points[0][0]," perdeu!")
+        self.points.remove(self.points[0])
+        self.points.remove(self.points[1])
     self.playing.remove((obj['username'],self))
     print("Fim da partida! ")
 
